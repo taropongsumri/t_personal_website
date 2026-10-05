@@ -5,6 +5,7 @@
 	import '@fontsource/shippori-mincho/700.css';
 	import '@fontsource/shippori-mincho/800.css';
 	import './layout.css';
+	import CardNav from '#lib/components/CardNav.svelte';
 	import favicon from '#lib/assets/favicon.svg';
 	import type { LayoutProps } from './$types';
 
@@ -15,5 +16,5 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<!-- Navbar goes here once ported (same spot as the old layout.tsx) -->
+<CardNav />
 {@render children()}
