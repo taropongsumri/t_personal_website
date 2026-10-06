@@ -1,67 +1,72 @@
 <!--
-	Cozy café stickers floating down the left and right of every page.
-	Only on big screens: phones and tablets don't have the empty space.
+	Tiny café stickers sprinkled down the left and right edges of every page.
+	They stay in narrow strips at the screen edges, far from the content,
+	and only appear on wide screens where those strips are empty.
 -->
 <script lang="ts">
-	type Sticker = {
-		/** File in static/assets. */
-		src: string;
-		/** Position, size, tilt and which screen size it appears from. */
-		class: string;
-	};
+	/** Pictures in static/assets: image_0.png … image_18.png. */
+	const IMAGE_COUNT = 19;
+	/** Stickers per lane, spread evenly from the top to the bottom of the page. */
+	const PER_LANE = 10;
 
-	// Positions are % of the whole page height, so the stickers spread down any page.
-	// Each side has two lanes that zig-zag:
-	//   outer lane (2% from the edge) at 4% / 30% / 56% / 82%
-	//   inner lane (9% from the edge) at 17% / 43% / 69%
-	// lg (1024px+): first outer only · xl (1280px+): whole outer lane · 2xl (1536px+): + inner lane.
-	// Sizes: small 3.6rem · medium 4.5rem · large 5.4rem.
-	// Not used yet: image_2 (raisin toast), image_4 (bread), image_6 (pumpkin), image_8 (gingham jam), image_11 (roll tray).
-	const stickers: Sticker[] = [
-		// left, outer
-		{ src: 'image_12.png', class: 'top-[4%] left-[2%] w-[3.6rem] -rotate-6 lg:block xl:w-[4.5rem]' }, // hot chocolate
-		{ src: 'image_0.png', class: 'top-[30%] left-[2%] w-[4.5rem] -rotate-12 xl:block' }, // cinnamon roll
-		{ src: 'image_9.png', class: 'top-[56%] left-[2%] w-[4.5rem] rotate-6 xl:block' }, // pretzel
-		{ src: 'image_10.png', class: 'top-[82%] left-[2%] w-[4.5rem] -rotate-6 xl:block' }, // jam toast
-		// left, inner
-		{ src: 'image_13.png', class: 'top-[17%] left-[9%] w-[3.6rem] rotate-12 2xl:block' }, // maple leaf
-		{ src: 'image_3.png', class: 'top-[43%] left-[9%] w-[3.6rem] rotate-6 2xl:block' }, // strawberry jam
-		{ src: 'image_7.png', class: 'top-[69%] left-[9%] w-[4.5rem] -rotate-12 2xl:block' }, // pain au chocolat
-		// right, outer
-		{ src: 'image_18.png', class: 'top-[4%] right-[2%] w-[3.6rem] rotate-6 lg:block xl:w-[4.5rem]' }, // pumpkin spice latte
-		{ src: 'image_16.png', class: 'top-[30%] right-[2%] w-[3.6rem] -rotate-6 xl:block' }, // coffee to go
-		{ src: 'image_17.png', class: 'top-[56%] right-[2%] w-[4.5rem] rotate-12 xl:block' }, // cookie
-		{ src: 'image_5.png', class: 'top-[82%] right-[2%] w-[4.5rem] -rotate-6 xl:block' }, // lattice pie
-		// right, inner
-		{ src: 'image_1.png', class: 'top-[17%] right-[9%] w-[4.5rem] rotate-6 2xl:block' }, // cake
-		{ src: 'image_14.png', class: 'top-[43%] right-[9%] w-[3.6rem] -rotate-3 2xl:block' }, // cozy vibes candle
-		{ src: 'image_15.png', class: 'top-[69%] right-[9%] w-[5.4rem] rotate-3 2xl:block' } // campfire
-	];
+	// Each side has an outer lane at the very edge and an inner lane a bit further in.
+	// `offset` staggers lanes so stickers on the same side don't line up.
+	const lanes = [
+		{ side: 'left', inset: '1.5%', show: 'xl:block', offset: 0 },
+		{ side: 'left', inset: '6%', show: '2xl:block', offset: 0.5 },
+		{ side: 'right', inset: '1.5%', show: 'xl:block', offset: 0.25 },
+		{ side: 'right', inset: '6%', show: '2xl:block', offset: 0.75 }
+	] as const;
+
+	/** Same "random" number for the same input, so server and browser render identical stickers. */
+	const random = (n: number) => (Math.imul(n + 1, 2654435761) >>> 0) / 2 ** 32;
+
+	const stickers = lanes.flatMap((lane, l) =>
+		Array.from({ length: PER_LANE }, (_, i) => {
+			const n = l * PER_LANE + i;
+			return {
+				src: `/assets/image_${(n * 7) % IMAGE_COUNT}.png`, // stepping by 7 keeps neighbours different
+				side: lane.side,
+				inset: lane.inset,
+				show: lane.show,
+				top: `${2 + ((i + lane.offset) / PER_LANE) * 94}%`,
+				size: `${28 + Math.round(random(n) * 12)}px`, // 28–40px
+				tilt: `${Math.round((random(n + 100) - 0.5) * 40)}deg`, // -20° to 20°
+				delay: `${-random(n + 200) * 6}s`
+			};
+		})
+	);
 </script>
 
 <div aria-hidden="true">
-	{#each stickers as { src, class: className }, i}
+	{#each stickers as sticker}
 		<img
-			src="/assets/{src}"
+			src={sticker.src}
 			alt=""
+			loading="lazy"
 			draggable="false"
-			class="sticker absolute z-10 hidden transition-[scale] duration-300 hover:scale-110 {className}"
-			style:--delay="{i * -0.8}s"
+			class="sticker absolute z-10 hidden transition-[scale] duration-300 hover:scale-125 {sticker.show}"
+			style:top={sticker.top}
+			style:left={sticker.side === 'left' ? sticker.inset : undefined}
+			style:right={sticker.side === 'right' ? sticker.inset : undefined}
+			style:width={sticker.size}
+			style:rotate={sticker.tilt}
+			style:--delay={sticker.delay}
 		/>
 	{/each}
 </div>
 
 <style>
 	.sticker {
-		filter: drop-shadow(0 6px 8px rgb(0 0 0 / 0.25));
+		filter: drop-shadow(0 3px 4px rgb(0 0 0 / 0.25));
 		animation: float 6s ease-in-out infinite;
 		animation-delay: var(--delay);
 	}
 
-	/* Gentle bobbing. Uses `translate` so it doesn't override the rotate-* tilt. */
+	/* Gentle bobbing. Uses `translate` so it doesn't override the tilt. */
 	@keyframes float {
 		50% {
-			translate: 0 -8px;
+			translate: 0 -4px;
 		}
 	}
 
