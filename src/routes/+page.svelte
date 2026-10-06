@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BaristaChat from '#lib/components/chat/BaristaChat.svelte';
 	import Hero from '#lib/components/Hero.svelte';
 </script>
 
@@ -8,4 +9,5 @@
 
 <main class="flex-1">
 	<Hero />
+	<BaristaChat />
 </main>

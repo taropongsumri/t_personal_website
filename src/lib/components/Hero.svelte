@@ -3,7 +3,8 @@
 	import FadeIn from '#lib/components/FadeIn.svelte';
 	import PixelTransition from '#lib/components/PixelTransition.svelte';
 	import SplitText from '#lib/components/SplitText.svelte';
-	import { c, facebook, github, linux, python, rust, svelte, tailwind, typescript } from '#lib/icons.js';
+	import { stack } from '#lib/data/stack.js';
+	import { facebook, github } from '#lib/icons.js';
 	import { splitHighlights } from '#lib/utils.js';
 
 	const name = 'Pongkaseam (Taro)';
@@ -17,15 +18,6 @@
 	const socials = [
 		{ label: 'GitHub', href: 'https://github.com/taropongsumri', icon: github },
 		{ label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61593483204421', icon: facebook }
-	];
-	const stack = [
-		{ title: 'C', icon: c },
-		{ title: 'Python', icon: python },
-		{ title: 'Rust', icon: rust },
-		{ title: 'Linux', icon: linux },
-		{ title: 'Svelte', icon: svelte },
-		{ title: 'Tailwind CSS', icon: tailwind },
-		{ title: 'TypeScript', icon: typescript }
 	];
 </script>
 
