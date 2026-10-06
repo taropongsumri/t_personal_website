@@ -97,7 +97,7 @@
 
 <svelte:window onresize={onResize} onkeydown={(e) => e.key === 'Escape' && close()} />
 
-<div class="absolute top-5 left-1/2 z-50 w-[90%] max-w-[800px] -translate-x-1/2 md:top-8">
+<div class="fixed top-5 left-1/2 z-50 w-[90%] max-w-[800px] -translate-x-1/2 md:top-8">
 	<nav
 		bind:this={nav}
 		class="relative h-[60px] overflow-hidden rounded-xl border bg-card shadow-sm will-change-[height]"
@@ -117,7 +117,7 @@
 			</button>
 
 			<a href="/" class="order-1 md:absolute md:left-1/2 md:order-none md:-translate-x-1/2">
-				<img src="/justlogo.svg" alt="txropks" class="h-4 w-auto md:h-5" />
+				<img src="/t_pongnav.svg" alt="txropks" class="h-4 w-auto invert md:h-5 light:invert-0" />
 			</a>
 
 			<a

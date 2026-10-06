@@ -6,7 +6,16 @@
 	import { tick } from 'svelte';
 	import ChatBubble from '#lib/components/chat/ChatBubble.svelte';
 	import ExperienceList from '#lib/components/ExperienceList.svelte';
-	import { barista, breakSeconds, farewell, greeting, questions, type Attachment, type Question } from '#lib/data/chat.js';
+	import {
+		barista,
+		breakSeconds,
+		farewells,
+		greetings,
+		pick,
+		questions,
+		type Attachment,
+		type Question
+	} from '#lib/data/chat.js';
 	import { experiences, openSource } from '#lib/data/experiences.js';
 	import { stack } from '#lib/data/stack.js';
 
@@ -47,9 +56,9 @@
 		asked.push(question.ask);
 		messages.push({ from: 'visitor', text: question.ask });
 		await wait(300);
-		await say(question.reply, question.attach);
+		await say(pick(question.replies), question.attach);
 		if (menu.length === 0) {
-			await say([farewell]);
+			await say(pick(farewells));
 			await wait(1500);
 			breakLeft = breakSeconds;
 		}
@@ -60,7 +69,7 @@
 		busy = true;
 		messages = [];
 		asked = [];
-		await say(greeting);
+		await say(pick(greetings));
 		busy = false;
 	}
 
@@ -105,7 +114,10 @@
 		<div inert={onBreak} class="transition-[filter] duration-500" class:blur-sm={onBreak}>
 			<!-- Header -->
 			<div class="flex items-center gap-3 border-b px-4 py-3">
-				<span class="grid size-10 place-items-center rounded-full bg-secondary text-xl" aria-hidden="true">☕</span>
+				<!-- The image has padding around its circle, so zoom in to fill the avatar. -->
+				<span class="size-10 shrink-0 overflow-hidden rounded-full border bg-secondary">
+					<img src="/capybara_profile.jpg" alt="" class="size-full scale-125 object-cover object-[50%_41%]" />
+				</span>
 				<div class="flex-1">
 					<p class="font-bold">{barista.name}</p>
 					<p class="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -113,7 +125,7 @@
 						{barista.role}
 					</p>
 				</div>
-				<span class="text-xs text-muted-foreground">pre-written answers</span>
+				<span class="text-xs text-muted-foreground">made with love</span>
 			</div>
 
 			<!-- Messages -->
