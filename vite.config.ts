@@ -4,6 +4,11 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+	ssr: {
+		// gsap ships ES-module .js files without "type": "module", which Node on Vercel
+		// loads as CommonJS and crashes. Bundling it into the server build avoids that.
+		noExternal: ['gsap']
+	},
 	plugins: [
 		tailwindcss(),
 		sveltekit({
