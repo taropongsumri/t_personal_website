@@ -13,6 +13,8 @@
 		direction?: 'top' | 'bottom';
 		/** Phrases inside `text` to emphasise, e.g. ['Cybersecurity']. */
 		highlights?: string[];
+		/** HTML tag to render, e.g. 'h1' for the page title. */
+		as?: 'p' | 'h1' | 'h2';
 		class?: string;
 	};
 
@@ -22,10 +24,11 @@
 		animateBy = 'words',
 		direction = 'top',
 		highlights = [],
+		as = 'p',
 		class: className = ''
 	}: Props = $props();
 
-	let el: HTMLParagraphElement;
+	let el: HTMLElement;
 	let visible = $state(false);
 
 	// Split the text into words/letters and mark the ones inside a highlighted phrase.
@@ -61,7 +64,8 @@
 	});
 </script>
 
-<p
+<svelte:element
+	this={as}
 	bind:this={el}
 	class={cn('flex flex-wrap', className)}
 	class:visible
@@ -78,7 +82,7 @@
 			{segment.text === ' ' ? ' ' : segment.text}{#if animateBy === 'words' && i < segments.length - 1}&nbsp;{/if}
 		</span>
 	{/each}
-</p>
+</svelte:element>
 
 <style>
 	.segment {
