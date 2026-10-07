@@ -1,37 +1,27 @@
 @import 'tailwindcss';
 
-@custom-variant dark (&:is(.dark *));
-
 /* Expose the CSS variables below as Tailwind classes (bg-card, text-muted-foreground, ...) */
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
 	--color-card: var(--card);
-	--color-card-foreground: var(--card-foreground);
 	--color-primary: var(--primary);
 	--color-primary-foreground: var(--primary-foreground);
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
-	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
 	--color-accent: var(--accent);
 	--color-accent-foreground: var(--accent-foreground);
-	--color-destructive: var(--destructive);
 	--color-border: var(--border);
-	--color-input: var(--input);
 	--color-ring: var(--ring);
+	--color-highlight: var(--highlight);
 
 	--font-sans: 'Shippori Mincho', serif;
-	--font-mono: 'Shippori Mincho', serif;
-	--font-heading: 'Shippori Mincho', serif;
 
-	--radius-sm: calc(var(--radius) * 0.6);
 	--radius-md: calc(var(--radius) * 0.8);
 	--radius-lg: var(--radius);
 	--radius-xl: calc(var(--radius) * 1.4);
 	--radius-2xl: calc(var(--radius) * 1.8);
-	--radius-3xl: calc(var(--radius) * 2.2);
-	--radius-4xl: calc(var(--radius) * 2.6);
 }
 
 :root {
@@ -40,40 +30,18 @@
 	--background: #262624;
 	--foreground: #faf9f5;
 	--card: #30302e;
-	--card-foreground: #faf9f5;
 	--primary: #b45837; /* Crail #c15f3c, darkened a touch so button text passes contrast */
 	--primary-foreground: #faf9f5;
 	--secondary: #3a3936;
 	--secondary-foreground: #faf9f5;
-	--muted: #3a3936;
 	--muted-foreground: #a6a39a;
 	--accent: #3a3936;
 	--accent-foreground: #faf9f5;
-	--destructive: oklch(0.704 0.191 22.216);
 	--border: rgb(250 249 245 / 0.1);
-	--input: rgb(250 249 245 / 0.15);
 	--ring: #c15f3c;
+	/* Orange for highlighted words (also hard-coded in the .hand-underline SVG below). */
+	--highlight: #d97757;
 	--radius: 0.625rem;
-}
-
-.dark {
-	/* warm cozy dark to match the kraft palette */
-	--background: oklch(0.2 0.008 75);
-	--foreground: oklch(0.92 0.01 85);
-	--card: oklch(0.25 0.01 75);
-	--card-foreground: oklch(0.92 0.01 85);
-	--primary: oklch(0.92 0.01 85);
-	--primary-foreground: oklch(0.2 0.008 75);
-	--secondary: oklch(0.3 0.012 75);
-	--secondary-foreground: oklch(0.92 0.01 85);
-	--muted: oklch(0.3 0.012 75);
-	--muted-foreground: oklch(0.72 0.015 85);
-	--accent: oklch(0.3 0.012 75);
-	--accent-foreground: oklch(0.92 0.01 85);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(1 0 0 / 10%);
-	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.55 0.02 85);
 }
 
 @layer base {
@@ -98,4 +66,34 @@ body::after {
 	opacity: 0.08;
 	mix-blend-mode: soft-light;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/*
+ * Hand-drawn underline for <SplitText highlight="…" class="hand-underline">.
+ * It wipes in from the left once the letters have landed (SplitText sets data-done).
+ * Tune per heading with --underline-left / --underline-width / --underline-bottom.
+ */
+.hand-underline .highlight {
+	position: relative;
+	display: inline-block;
+}
+.hand-underline .highlight::after {
+	content: '';
+	position: absolute;
+	left: var(--underline-left, 0);
+	width: var(--underline-width, 100%);
+	bottom: var(--underline-bottom, -0.15em);
+	height: 0.4em;
+	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9C40 3 78 12 120 7s82-5 117 2' fill='none' stroke='%23d97757' stroke-width='3' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M30 12c45-4 110-5 175-3' fill='none' stroke='%23d97757' stroke-width='2' stroke-linecap='round' opacity='.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+	clip-path: inset(0 100% 0 0);
+	transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+	pointer-events: none;
+}
+.hand-underline[data-done] .highlight::after {
+	clip-path: inset(0 0 0 0);
+}
+@media (prefers-reduced-motion: reduce) {
+	.hand-underline .highlight::after {
+		transition: none;
+	}
 }

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Button from '#lib/components/Button.svelte';
 	import FadeIn from '#lib/components/FadeIn.svelte';
+	import HighlightText from '#lib/components/HighlightText.svelte';
 	import PixelTransition from '#lib/components/PixelTransition.svelte';
 	import SplitText from '#lib/components/SplitText.svelte';
 	import { c, facebook, github, linux, python, rust, svelte, tailwind, typescript } from '#lib/icons.js';
-	import { splitHighlights } from '#lib/utils.js';
 
 	const name = 'Pongkaseam (Taro)';
 	const role = 'Software Engineer · 42';
@@ -44,12 +44,12 @@
 			</p>
 		</FadeIn>
 
-		<SplitText as="h1" text="Hi, I'm {name}" highlight={name} class="hero-title text-3xl font-bold tracking-tight sm:text-4xl" />
+		<SplitText as="h1" text="Hi, I'm {name}" highlight={name} class="hand-underline text-3xl font-bold tracking-tight [--underline-bottom:-0.5em] [--underline-left:0.8em] [--underline-width:84%] sm:text-4xl" />
 
 		{#each intro as line, i}
 			<FadeIn delay={300 + i * 150}>
 				<p class="leading-relaxed text-muted-foreground sm:text-lg">
-					{#each splitHighlights(line, highlights) as part}{#if part.highlight}<strong class="text-foreground">{part.text}</strong>{:else}{part.text}{/if}{/each}
+					<HighlightText text={line} {highlights} />
 				</p>
 			</FadeIn>
 		{/each}
@@ -150,33 +150,5 @@
 			color-mix(in oklch, var(--primary) 18%, transparent),
 			transparent
 		);
-	}
-
-	/* Hand-drawn underline under the name. It wipes in from the left once the
-	   letters have landed (SplitText sets data-done). The heading lives inside
-	   SplitText, so these selectors must be global. */
-	:global(.hero-title .highlight) {
-		position: relative;
-		display: inline-block;
-	}
-	:global(.hero-title .highlight)::after {
-		content: '';
-		position: absolute;
-		left: 0.8em;
-		width: 84%;
-		bottom: -0.5em;
-		height: 0.4em;
-		background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9C40 3 78 12 120 7s82-5 117 2' fill='none' stroke='%23d97757' stroke-width='3' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M30 12c45-4 110-5 175-3' fill='none' stroke='%23d97757' stroke-width='2' stroke-linecap='round' opacity='.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-		clip-path: inset(0 100% 0 0);
-		transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
-		pointer-events: none;
-	}
-	:global(.hero-title[data-done] .highlight)::after {
-		clip-path: inset(0 0 0 0);
-	}
-	@media (prefers-reduced-motion: reduce) {
-		:global(.hero-title .highlight)::after {
-			transition: none;
-		}
 	}
 </style>

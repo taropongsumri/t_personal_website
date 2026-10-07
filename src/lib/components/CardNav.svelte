@@ -19,7 +19,7 @@
 			class: 'bg-secondary text-secondary-foreground',
 			links: [
 				{ label: 'Home', href: '/#home' },
-				{ label: 'About me', href: '/#about' }
+				{ label: 'About me', href: '/about' }
 			]
 		},
 		{

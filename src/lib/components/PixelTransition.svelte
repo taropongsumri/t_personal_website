@@ -15,8 +15,6 @@
 		pixelColor?: string;
 		/** Seconds for the pixels to cover the card (and again to clear it). */
 		duration?: number;
-		/** Stay on `second` once revealed. */
-		once?: boolean;
 		/** CSS aspect-ratio, e.g. "4 / 5". */
 		aspectRatio?: string;
 		class?: string;
@@ -28,7 +26,6 @@
 		gridSize = 7,
 		pixelColor = 'currentColor',
 		duration = 0.3,
-		once = false,
 		aspectRatio = '1 / 1',
 		class: className = ''
 	}: Props = $props();
@@ -62,7 +59,7 @@
 	}
 
 	const reveal = () => !active && animate(true);
-	const hide = () => active && !once && animate(false);
+	const hide = () => active && animate(false);
 	const toggle = () => (active ? hide() : reveal());
 </script>
 

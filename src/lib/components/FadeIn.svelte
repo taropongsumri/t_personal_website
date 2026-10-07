@@ -9,12 +9,10 @@
 		children: Snippet;
 		/** Milliseconds to wait before fading in. */
 		delay?: number;
-		/** Milliseconds the fade takes. */
-		duration?: number;
 		class?: string;
 	};
 
-	let { children, delay = 0, duration = 800, class: className = '' }: Props = $props();
+	let { children, delay = 0, class: className = '' }: Props = $props();
 
 	let el: HTMLDivElement;
 	let visible = $state(false);
@@ -36,7 +34,6 @@
 	class={cn('fade', className)}
 	class:visible
 	style:animation-delay="{delay}ms"
-	style:animation-duration="{duration}ms"
 >
 	{@render children()}
 </div>
@@ -47,7 +44,7 @@
 	}
 
 	.visible {
-		animation: fade-in ease-out both;
+		animation: fade-in 0.8s ease-out both;
 	}
 
 	@keyframes fade-in {

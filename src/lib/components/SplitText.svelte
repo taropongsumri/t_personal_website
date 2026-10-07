@@ -14,11 +14,6 @@
 		text: string;
 		/** HTML tag to render, e.g. 'h1' for the page title. */
 		as?: 'p' | 'h1' | 'h2' | 'span';
-		splitBy?: 'chars' | 'words';
-		/** Milliseconds between each letter/word starting. */
-		delay?: number;
-		/** Seconds each letter/word takes to rise in. */
-		duration?: number;
 		/** Part of `text` wrapped in <span class="highlight"> so it can be styled. */
 		highlight?: string;
 		class?: string;
@@ -27,12 +22,13 @@
 	let {
 		text,
 		as = 'p',
-		splitBy = 'chars',
-		delay = 40,
-		duration = 1.25,
 		highlight,
 		class: className = ''
 	}: Props = $props();
+
+	/** Seconds between each letter starting, and seconds each letter takes to rise in. */
+	const STAGGER = 0.04;
+	const DURATION = 1.25;
 
 	let el: HTMLElement;
 	let ready = $state(false); // hidden until split, so the full text never flashes first
@@ -56,8 +52,8 @@
 			}
 
 			// 'words, chars' keeps each word's letters together so a word never breaks across lines.
-			split = SplitText.create(el, { type: splitBy === 'chars' ? 'words, chars' : 'words' });
-			const targets = splitBy === 'chars' ? split.chars : split.words;
+			split = SplitText.create(el, { type: 'words, chars' });
+			const targets = split.chars;
 			gsap.set(targets, { opacity: 0, y: 40 });
 
 			observer = new IntersectionObserver(([entry]) => {
@@ -66,9 +62,9 @@
 				tween = gsap.to(targets, {
 					opacity: 1,
 					y: 0,
-					duration,
+					duration: DURATION,
 					ease: 'power3.out',
-					stagger: delay / 1000,
+					stagger: STAGGER,
 					// Letters ease out, so they look settled well before the tween ends.
 					onUpdate() {
 						if (!done && this.progress() > 0.6) done = true;
