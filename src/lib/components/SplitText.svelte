@@ -6,7 +6,7 @@
 <script lang="ts">
 	import { gsap } from 'gsap';
 	import { SplitText } from 'gsap/SplitText';
-	import { cn } from '#lib/utils.js';
+	import { cn, splitHighlights } from '#lib/utils.js';
 
 	gsap.registerPlugin(SplitText);
 
@@ -19,6 +19,8 @@
 		delay?: number;
 		/** Seconds each letter/word takes to rise in. */
 		duration?: number;
+		/** Part of `text` wrapped in <span class="highlight"> so it can be styled. */
+		highlight?: string;
 		class?: string;
 	};
 
@@ -28,11 +30,15 @@
 		splitBy = 'chars',
 		delay = 40,
 		duration = 1.25,
+		highlight,
 		class: className = ''
 	}: Props = $props();
 
 	let el: HTMLElement;
 	let ready = $state(false); // hidden until split, so the full text never flashes first
+	let done = $state(false); // letters have (mostly) landed; exposed as data-done for CSS
+
+	const parts = $derived(splitHighlights(text, highlight ? [highlight] : []));
 
 	$effect(() => {
 		let split: SplitText | undefined;
@@ -44,7 +50,10 @@
 		document.fonts.ready.then(() => {
 			if (cancelled) return;
 			ready = true;
-			if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+			if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				done = true;
+				return;
+			}
 
 			// 'words, chars' keeps each word's letters together so a word never breaks across lines.
 			split = SplitText.create(el, { type: splitBy === 'chars' ? 'words, chars' : 'words' });
@@ -59,7 +68,11 @@
 					y: 0,
 					duration,
 					ease: 'power3.out',
-					stagger: delay / 1000
+					stagger: delay / 1000,
+					// Letters ease out, so they look settled well before the tween ends.
+					onUpdate() {
+						if (!done && this.progress() > 0.6) done = true;
+					}
 				});
 			});
 			observer.observe(el);
@@ -74,4 +87,6 @@
 	});
 </script>
 
-<svelte:element this={as} bind:this={el} class={cn(!ready && 'invisible', className)}>{text}</svelte:element>
+<svelte:element this={as} bind:this={el} class={cn(!ready && 'invisible', className)} data-done={done || undefined}
+	>{#each parts as part}{#if part.highlight}<span class="highlight">{part.text}</span>{:else}{part.text}{/if}{/each}</svelte:element
+>
