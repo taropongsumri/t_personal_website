@@ -6,6 +6,7 @@
 	import '@fontsource/shippori-mincho/800.css';
 	import './layout.css';
 	import CardNav from '#lib/components/CardNav.svelte';
+	import ClickSpark from '#lib/components/ClickSpark.svelte';
 	import favicon from '#lib/assets/favicon.svg';
 	import type { LayoutProps } from './$types';
 
@@ -18,3 +19,4 @@
 
 <CardNav />
 {@render children()}
+<ClickSpark />
