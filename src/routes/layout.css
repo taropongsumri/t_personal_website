@@ -35,23 +35,24 @@
 }
 
 :root {
-	/* muji / kraft-paper warm neutrals */
-	--background: oklch(0.92 0.02 85);
-	--foreground: oklch(0.27 0.012 75);
-	--card: oklch(0.95 0.015 85);
-	--card-foreground: oklch(0.27 0.012 75);
-	--primary: oklch(0.27 0.012 75);
-	--primary-foreground: oklch(0.95 0.015 85);
-	--secondary: oklch(0.88 0.022 85);
-	--secondary-foreground: oklch(0.27 0.012 75);
-	--muted: oklch(0.88 0.022 85);
-	--muted-foreground: oklch(0.5 0.02 85);
-	--accent: oklch(0.88 0.022 85);
-	--accent-foreground: oklch(0.27 0.012 75);
-	--destructive: oklch(0.577 0.245 27.325);
-	--border: oklch(0.84 0.022 85);
-	--input: oklch(0.84 0.022 85);
-	--ring: oklch(0.6 0.02 85);
+	/* Claude-style dark: warm near-black, ivory text, Crail orange accent */
+	color-scheme: dark;
+	--background: #262624;
+	--foreground: #faf9f5;
+	--card: #30302e;
+	--card-foreground: #faf9f5;
+	--primary: #b45837; /* Crail #c15f3c, darkened a touch so button text passes contrast */
+	--primary-foreground: #faf9f5;
+	--secondary: #3a3936;
+	--secondary-foreground: #faf9f5;
+	--muted: #3a3936;
+	--muted-foreground: #a6a39a;
+	--accent: #3a3936;
+	--accent-foreground: #faf9f5;
+	--destructive: oklch(0.704 0.191 22.216);
+	--border: rgb(250 249 245 / 0.1);
+	--input: rgb(250 249 245 / 0.15);
+	--ring: #c15f3c;
 	--radius: 0.625rem;
 }
 
@@ -94,7 +95,7 @@ body::after {
 	inset: 0;
 	z-index: 100;
 	pointer-events: none;
-	opacity: 0.12;
-	mix-blend-mode: multiply;
+	opacity: 0.08;
+	mix-blend-mode: soft-light;
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }

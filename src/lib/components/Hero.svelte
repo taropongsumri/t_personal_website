@@ -147,7 +147,7 @@
 	.glow {
 		background: radial-gradient(
 			closest-side,
-			color-mix(in oklch, var(--muted-foreground) 35%, transparent),
+			color-mix(in oklch, var(--primary) 18%, transparent),
 			transparent
 		);
 	}

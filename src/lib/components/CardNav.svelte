@@ -117,7 +117,7 @@
 			</button>
 
 			<a href="/" class="order-1 md:absolute md:left-1/2 md:order-none md:-translate-x-1/2">
-				<img src="/justlogo.svg" alt="txropks" class="h-4 w-auto md:h-5" />
+				<img src="/justlogo.svg" alt="txropks" class="h-4 w-auto invert md:h-5" />
 			</a>
 
 			<a
