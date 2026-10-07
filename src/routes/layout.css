@@ -1,7 +1,6 @@
 @import 'tailwindcss';
 
-/* `light:` prefix, e.g. `light:invert-0`, applies only in the light (kraft) theme. */
-@custom-variant light (&:where(.light, .light *));
+@custom-variant dark (&:is(.dark *));
 
 /* Expose the CSS variables below as Tailwind classes (bg-card, text-muted-foreground, ...) */
 @theme inline {
@@ -36,30 +35,7 @@
 }
 
 :root {
-	/* coffee: brown background, cream text */
-	color-scheme: dark;
-	--background: oklch(0.3 0.045 55);
-	--foreground: oklch(0.94 0.025 85);
-	--card: oklch(0.35 0.045 55);
-	--card-foreground: oklch(0.94 0.025 85);
-	--primary: oklch(0.94 0.025 85);
-	--primary-foreground: oklch(0.28 0.045 55);
-	--secondary: oklch(0.4 0.045 58);
-	--secondary-foreground: oklch(0.94 0.025 85);
-	--muted: oklch(0.4 0.045 58);
-	--muted-foreground: oklch(0.78 0.035 75);
-	--accent: oklch(0.4 0.045 58);
-	--accent-foreground: oklch(0.94 0.025 85);
-	--destructive: oklch(0.704 0.191 22.216);
-	--border: oklch(0.94 0.025 85 / 12%);
-	--input: oklch(0.94 0.025 85 / 18%);
-	--ring: oklch(0.7 0.04 70);
-	--radius: 0.625rem;
-}
-
-.light {
-	/* old kraft-paper theme: warm beige background, dark text */
-	color-scheme: light;
+	/* muji / kraft-paper warm neutrals */
 	--background: oklch(0.92 0.02 85);
 	--foreground: oklch(0.27 0.012 75);
 	--card: oklch(0.95 0.015 85);
@@ -76,6 +52,27 @@
 	--border: oklch(0.84 0.022 85);
 	--input: oklch(0.84 0.022 85);
 	--ring: oklch(0.6 0.02 85);
+	--radius: 0.625rem;
+}
+
+.dark {
+	/* warm cozy dark to match the kraft palette */
+	--background: oklch(0.2 0.008 75);
+	--foreground: oklch(0.92 0.01 85);
+	--card: oklch(0.25 0.01 75);
+	--card-foreground: oklch(0.92 0.01 85);
+	--primary: oklch(0.92 0.01 85);
+	--primary-foreground: oklch(0.2 0.008 75);
+	--secondary: oklch(0.3 0.012 75);
+	--secondary-foreground: oklch(0.92 0.01 85);
+	--muted: oklch(0.3 0.012 75);
+	--muted-foreground: oklch(0.72 0.015 85);
+	--accent: oklch(0.3 0.012 75);
+	--accent-foreground: oklch(0.92 0.01 85);
+	--destructive: oklch(0.704 0.191 22.216);
+	--border: oklch(1 0 0 / 10%);
+	--input: oklch(1 0 0 / 15%);
+	--ring: oklch(0.55 0.02 85);
 }
 
 @layer base {
@@ -97,13 +94,7 @@ body::after {
 	inset: 0;
 	z-index: 100;
 	pointer-events: none;
-	opacity: 0.18;
-	mix-blend-mode: soft-light;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* On light paper, darken the grain instead. */
-.light body::after {
 	opacity: 0.12;
 	mix-blend-mode: multiply;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
