@@ -1,9 +1,10 @@
 <!--
-	Card Nav, ported from React Bits (reactbits.dev) to Svelte + our kraft theme.
-	A slim bar that expands (GSAP) to reveal up to three link cards.
+	Card Nav, ported from React Bits (reactbits.dev) to Svelte + our dark theme.
+	A slim bar that expands (GSAP) to reveal a row of link cards.
 -->
 <script lang="ts">
 	import { gsap } from 'gsap';
+	import { site } from '#lib/data/site.js';
 
 	type NavCard = {
 		label: string;
@@ -12,7 +13,7 @@
 		links: { label: string; href: string }[];
 	};
 
-	// Cards go from light to dark kraft, left to right.
+	// Cards go from dark grey to ivory, left to right.
 	const cards: NavCard[] = [
 		{
 			label: 'About',
@@ -23,21 +24,13 @@
 			]
 		},
 		{
-			label: 'Projects',
-			class: 'bg-muted-foreground text-background',
-			links: [{ label: 'All projects', href: '/projects' }]
-		},
-		{
 			label: 'Contact',
 			class: 'bg-foreground text-background',
-			links: [
-				{ label: 'GitHub', href: 'https://github.com/ChocodevX' },
-				{ label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61593483204421' }
-			]
+			links: site.socials.map(({ label, href }) => ({ label, href }))
 		}
 	];
 
-	const cta = { label: 'Email me', href: 'mailto:halfdevc@gmail.com' };
+	const cta = { label: 'Email', href: `mailto:${site.email}` };
 
 	const BAR_HEIGHT = 60;
 	const DESKTOP_HEIGHT = 260;
@@ -117,7 +110,7 @@
 			</button>
 
 			<a href="/" class="order-1 md:absolute md:left-1/2 md:order-none md:-translate-x-1/2">
-				<img src="/justlogo.svg" alt="txropks" class="h-4 w-auto invert md:h-5" />
+				<img src="/justlogo.svg" alt={site.title} class="h-4 w-auto invert md:h-5" />
 			</a>
 
 			<a

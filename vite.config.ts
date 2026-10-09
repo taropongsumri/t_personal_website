@@ -7,7 +7,7 @@ export default defineConfig({
 	ssr: {
 		// gsap ships ES-module .js files without "type": "module", which Node on Vercel
 		// loads as CommonJS and crashes. Bundling it into the server build avoids that.
-		noExternal: ['gsap']
+		noExternal: ['gsap', 'ogl']
 	},
 	plugins: [
 		tailwindcss(),
@@ -18,7 +18,13 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 
-			adapter: adapter()
+			adapter: adapter(),
+
+			prerender: {
+				// The hero's scroll hint links to #about, which isn't built yet. Warn instead of
+				// failing the build. TODO: switch back to the default ('fail') once it exists.
+				handleMissingId: 'warn'
+			}
 		})
 	]
 });

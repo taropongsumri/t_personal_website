@@ -4,29 +4,15 @@
 	import HighlightText from '#lib/components/HighlightText.svelte';
 	import PixelTransition from '#lib/components/PixelTransition.svelte';
 	import SplitText from '#lib/components/SplitText.svelte';
-	import { c, facebook, github, linux, python, rust, svelte, tailwind, typescript } from '#lib/icons.js';
+	import { site } from '#lib/data/site.js';
 
-	const name = 'Pongkaseam (Taro)';
-	const role = 'Software Engineer · 42';
+	const { name, role, socials, stack } = site;
 	const status = 'Studying at 42 Bangkok';
 	const intro = [
 		"I'm currently studying at 42 Bangkok, focusing on Low-level programming and Cybersecurity.",
 		'Passionate about building web applications and solving complex technical challenges.'
 	];
 	const highlights = ['Low-level programming', 'Cybersecurity'];
-	const socials = [
-		{ label: 'GitHub', href: 'https://github.com/taropongsumri', icon: github },
-		{ label: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61593483204421', icon: facebook }
-	];
-	const stack = [
-		{ title: 'C', icon: c },
-		{ title: 'Python', icon: python },
-		{ title: 'Rust', icon: rust },
-		{ title: 'Linux', icon: linux },
-		{ title: 'Svelte', icon: svelte },
-		{ title: 'Tailwind CSS', icon: tailwind },
-		{ title: 'TypeScript', icon: typescript }
-	];
 </script>
 
 <section
@@ -55,23 +41,6 @@
 		{/each}
 
 		<FadeIn delay={600} class="flex flex-wrap items-center gap-3">
-			<Button href="/projects" size="lg">
-				View Projects
-				<svg
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					aria-hidden="true"
-					class="transition-transform duration-200 group-hover/button:translate-x-1"
-				>
-					<line x1="5" y1="12" x2="19" y2="12" />
-					<polyline points="12 5 19 12 12 19" />
-				</svg>
-			</Button>
-
 			{#each socials as { label, href, icon }}
 				<Button {href} size="lg" variant="outline" target="_blank" rel="noreferrer">
 					<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={icon} /></svg>
@@ -121,7 +90,7 @@
 		</PixelTransition>
 	</div>
 
-	<!-- Scroll hint -->
+	<!-- Scroll hint. TODO: #about doesn't exist yet; point it at the section that will go below the hero. -->
 	<a
 		href="#about"
 		class="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground md:flex"

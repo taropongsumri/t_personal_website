@@ -39,7 +39,7 @@
 	--accent-foreground: #faf9f5;
 	--border: rgb(250 249 245 / 0.1);
 	--ring: #c15f3c;
-	/* Orange for highlighted words (also hard-coded in the .hand-underline SVG below). */
+	/* Orange for highlighted words, tags and the hand-drawn underline. */
 	--highlight: #d97757;
 	--radius: 0.625rem;
 }
@@ -84,7 +84,11 @@ body::after {
 	width: var(--underline-width, 100%);
 	bottom: var(--underline-bottom, -0.15em);
 	height: 0.4em;
-	background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9C40 3 78 12 120 7s82-5 117 2' fill='none' stroke='%23d97757' stroke-width='3' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M30 12c45-4 110-5 175-3' fill='none' stroke='%23d97757' stroke-width='2' stroke-linecap='round' opacity='.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+	/* The SVG is only the shape (a mask); the colour comes from --highlight. */
+	background: var(--highlight);
+	--squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'%3E%3Cpath d='M3 9C40 3 78 12 120 7s82-5 117 2' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3Cpath d='M30 12c45-4 110-5 175-3' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' opacity='.55' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+	-webkit-mask: var(--squiggle) center / 100% 100% no-repeat;
+	mask: var(--squiggle) center / 100% 100% no-repeat;
 	clip-path: inset(0 100% 0 0);
 	transition: clip-path 0.9s cubic-bezier(0.65, 0, 0.35, 1);
 	pointer-events: none;
